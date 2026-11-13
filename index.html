@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mine Heart — For Renu</title>
+  <!-- Tailwind CSS for responsive layout utilities -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Romantic Cursive Lyrics & Classical Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    /* ==========================================================================
+       STAR SHOWER BACKGROUND CANVAS
+       ========================================================================== */
+    #starCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       ROMANTIC OPENING GATEWAY OVERLAY
+       ========================================================================== */
+    .opening-gateway {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: radial-gradient(circle at center, rgba(28, 4, 10, 0.85) 0%, rgba(0, 0, 0, 0.96) 70%);
+      backdrop-filter: blur(6px);
+      transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), visibility 1.2s ease;
+    }
+
+    .opening-gateway.hidden-gateway {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .quote-card {
+      max-width: 680px;
+      text-align: center;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(255, 42, 75, 0.22);
+      border-radius: 1.5rem;
+      background: linear-gradient(180deg, rgba(20, 2, 6, 0.65) 0%, rgba(5, 0, 2, 0.85) 100%);
+      box-shadow: 0 0 60px rgba(225, 29, 72, 0.15), inset 0 0 30px rgba(225, 29, 72, 0.08);
+    }
+
+    .cursive-pre {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 4.5vw, 3.1rem);
+      color: #fda4af;
+      text-shadow: 0 0 20px rgba(251, 113, 133, 0.6);
+      margin-bottom: 0.75rem;
+    }
+
+    .poetic-verse {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      line-height: 1.75;
+      color: #f8fafc;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .poet-credit {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.25em;
+      color: rgba(253, 164, 175, 0.75);
+      text-transform: uppercase;
+      margin-bottom: 2.25rem;
+    }
+
+    .enter-heart-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.95rem 2.4rem;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(0.9rem, 2vw, 1.08rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(225, 29, 72, 0.35) 0%, rgba(136, 19, 55, 0.65) 100%);
+      border: 1px solid rgba(251, 113, 133, 0.7);
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 0 30px rgba(225, 29, 72, 0.45), inset 0 0 15px rgba(255, 255, 255, 0.15);
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      animation: btnHeartbeat 2.2s infinite ease-in-out;
+    }
+
+    .enter-heart-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+      background: linear-gradient(135deg, rgba(225, 29, 72, 0.65) 0%, rgba(190, 18, 60, 0.85) 100%);
+      border-color: #ffffff;
+      box-shadow: 0 0 45px rgba(244, 63, 94, 0.85), inset 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes btnHeartbeat {
+      0%, 100% { transform: scale(1); }
+      15% { transform: scale(1.06); }
+      30% { transform: scale(0.99); }
+      45% { transform: scale(1.04); }
+    }
+
+    /* ==========================================================================
+       MAIN STAGE, LYRICS DISPLAY & ENLARGED HEART CONTAINER
+       ========================================================================== */
+    .canvas-stage {
+      position: relative;
+      z-index: 10;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1rem 1.5rem;
+    }
+
+    /* Big Cursive Song Lyrics Container above the Heart */
+    .lyrics-stage {
+      width: 100%;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.25rem 1rem;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .lyric-line {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.1rem, 5.2vw, 3.85rem);
+      line-height: 1.25;
+      color: #fff1f2;
+      text-shadow:
+        0 0 18px rgba(255, 36, 66, 0.85),
+        0 0 38px rgba(225, 29, 72, 0.55),
+        0 2px 10px rgba(0, 0, 0, 0.95);
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      letter-spacing: 0.03em;
+    }
+
+    .lyric-line.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .lyric-line.fade-out {
+      opacity: 0;
+      transform: translateY(-10px) scale(1.02);
+    }
+
+    /* Enlarged Heart Wrapper */
+    .artwork-wrapper {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      max-width: 720px;
+      max-height: 72vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Soft Crimson Backlight Aura when Heart Pumps */
+    .heart-aura {
+      position: absolute;
+      width: 65%;
+      height: 65%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 24, 60, 0.26) 0%, rgba(255, 24, 60, 0.06) 50%, transparent 75%);
+      filter: blur(28px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+
+    .heart-aura.active {
+      opacity: 1;
+      animation: auraPulse 1.15s infinite ease-in-out;
+    }
+
+    @keyframes auraPulse {
+      0%, 100% { transform: scale(0.92); opacity: 0.45; }
+      18% { transform: scale(1.14); opacity: 0.95; }
+      32% { transform: scale(0.98); opacity: 0.6; }
+      48% { transform: scale(1.08); opacity: 0.85; }
+    }
+
+    #heartSvg {
+      width: 100%;
+      height: 100%;
+      max-height: 70vh;
+      display: block;
+      overflow: visible;
+      transform-origin: center center;
+    }
+
+    /* Realistic "Lub-Dub" Anatomical Heartbeat Pumping Animation */
+    #heartSvg.pumping {
+      animation: realisticHeartPump 1.15s infinite cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    @keyframes realisticHeartPump {
+      0%   { transform: scale(1); }
+      14%  { transform: scale(1.075); }
+      26%  { transform: scale(0.99); }
+      40%  { transform: scale(1.048); }
+      65%  { transform: scale(1); }
+      100% { transform: scale(1); }
+    }
+
+    /* ==========================================================================
+       SVG STROKE STYLES — WHITE SILHOUETTE & GLOWING CRIMSON RED NERVES
+       ========================================================================== */
+    .draw-path {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0;
+      will-change: stroke-dashoffset, opacity;
+    }
+
+    /* White Structural Outlines & Upper Vessels */
+    .white-main-stroke {
+      stroke: #ffffff;
+      stroke-width: 3.3;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.35));
+    }
+
+    .white-detail-stroke {
+      stroke: rgba(255, 255, 255, 0.9);
+      stroke-width: 2.35;
+    }
+
+    /* Glowing Crimson Red Nerves & Coronary Arteries */
+    .red-nerve-main {
+      stroke: #ff1e42;
+      stroke-width: 3.1;
+      filter: drop-shadow(0 0 8px rgba(255, 30, 66, 0.85));
+    }
+
+    .red-nerve-branch {
+      stroke: #ff2e55;
+      stroke-width: 2.4;
+      filter: drop-shadow(0 0 6px rgba(255, 46, 85, 0.75));
+    }
+
+    .red-nerve-fine {
+      stroke: #ff4769;
+      stroke-width: 1.9;
+      filter: drop-shadow(0 0 5px rgba(255, 71, 105, 0.65));
+    }
+
+    #heartSvg.pumping .red-nerve-main,
+    #heartSvg.pumping .red-nerve-branch,
+    #heartSvg.pumping .red-nerve-fine {
+      animation: nerveGlowPulse 1.15s infinite ease-in-out;
+    }
+
+    @keyframes nerveGlowPulse {
+      0%, 100% {
+        stroke: #ff1e42;
+        filter: drop-shadow(0 0 6px rgba(255, 30, 66, 0.7));
+      }
+      16%, 42% {
+        stroke: #ff5c77;
+        filter: drop-shadow(0 0 14px rgba(255, 46, 85, 1));
+      }
+    }
+
+    /* Guide stroke & Calligraphic Fill for the Central Letter "R" */
+    .r-stroke-guide {
+      stroke: #ffffff;
+      stroke-width: 3.5;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+    }
+
+    .r-calligraphic-fill {
+      fill: #ffffff;
+      stroke: none;
+      opacity: 0;
+      filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.55));
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .r-calligraphic-fill.visible {
+      opacity: 1;
+    }
+
+    /* Live Drawing Pen Tip Nib */
+    .pen-cursor {
+      fill: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+      transition: opacity 0.2s ease, fill 0.2s ease;
+    }
+
+    .pen-cursor.active {
+      opacity: 0.95;
+    }
+
+    .pen-cursor.red-nib {
+      fill: #ff2e55;
+      filter: drop-shadow(0 0 10px rgba(255, 46, 85, 1));
+    }
+
+    /* ==========================================================================
+       SIGNATURE FOOTER ("ALTAF'S HEART") & PLAY AGAIN BUTTON
+       ========================================================================== */
+    .altaf-signature-box {
+      text-align: center;
+      z-index: 20;
+      cursor: pointer;
+      padding: 0.25rem 1rem;
+    }
+
+    .altaf-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 18px rgba(255, 36, 66, 0.65), 0 0 35px rgba(255, 255, 255, 0.25);
+      transition: transform 0.35s ease, text-shadow 0.35s ease;
+    }
+
+    .altaf-Origin-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+      letter-spacing: 0.16em;
+      color: #fda4af;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .altaf-Origin-sub.visible {
+      opacity: 0.85;
+      transform: translateY(0);
+    }
+
+    .altaf-signature-box:hover .altaf-title {
+      opacity: 1;
+      transform: scale(1.03);
+      text-shadow: 0 0 32px rgba(255, 46, 85, 0.85);
+    }
+
+    /* Play Again Button (Appears automatically when the song finishes) */
+    .replay-heart-btn {
+      margin-top: 0.65rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1.6rem;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: rgba(225, 29, 72, 0.24);
+      border: 1px solid rgba(251, 113, 133, 0.65);
+      border-radius: 999px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px) scale(0.95);
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 0 22px rgba(225, 29, 72, 0.35), inset 0 0 12px rgba(225, 29, 72, 0.2);
+    }
+
+    .replay-heart-btn.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      animation: btnHeartbeat 2.2s infinite ease-in-out;
+    }
+
+    .replay-heart-btn:hover {
+      background: rgba(225, 29, 72, 0.45);
+      border-color: #ffffff;
+      box-shadow: 0 0 35px rgba(244, 63, 94, 0.75);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .replay-heart-btn svg {
+      width: 15px;
+      height: 15px;
+      fill: #fb7185;
+      transition: transform 0.35s ease, fill 0.35s ease;
+    }
+
+    .replay-heart-btn:hover svg {
+      fill: #ffffff;
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Continuous Star Shower & Shooting Meteors -->
+  <canvas id="starCanvas"></canvas>
+
+  <!-- Hidden Background Audio Element (Place 'song.mp3' in the same folder for your custom audio) -->
+  <audio id="heartSongAudio" src="song.mp3" preload="auto"></audio>
+
+  <!-- =========================================================================
+       ROMANTIC OPENING PAGE WITH ORIGINAL POETIC QUOTE
+       ========================================================================= -->
+  <section id="openingGateway" class="opening-gateway">
+    <div class="quote-card">
+      <p class="cursive-pre">Ishq-e-Renu</p>
+      <p class="poetic-verse">
+        "Step softly inside this silent chamber of veins and stars,<br />
+        where every drop of crimson remembers only your name,<br />
+        and every heartbeat waits for your command."
+      </p>
+      <p class="poet-credit">— Inspired by Rumi &amp; Mirza Ghalib</p>
+
+      <button id="enterHeartBtn" class="enter-heart-btn" type="button">
+        <span>Enter In His Heart</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       MAIN STAGE: BIG CURSIVE LYRICS + ENLARGED HEART + ALTAF'S HEART FOOTER
+       ========================================================================= -->
+  <main class="canvas-stage">
+    <!-- Line-by-Line Big Cursive Song Lyrics ("O Saahib") -->
+    <div class="lyrics-stage">
+      <div id="lyricLineDisplay" class="lyric-line"></div>
+    </div>
+
+    <!-- Tightly Cropped & Enlarged Anatomical Heart SVG -->
+    <div class="artwork-wrapper">
+      <div id="heartAura" class="heart-aura"></div>
+
+      <!--
+        Cropped viewBox="220 420 580 985" enlarges the heart to fill the screen
+        while keeping the exact proportions and geometry of the reference artwork.
+      -->
+      <svg
+        id="heartSvg"
+        viewBox="220 420 580 985"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-label="Altaf's Anatomical Heart with Glowing Red Nerves and Letter R"
+      >
+        <!-- PHASE 2: MAIN HEART OUTLINE & JIGSAW CUTOUT (CRISP WHITE) -->
+        <g id="phase-2-outline">
+          <path
+            class="draw-path white-main-stroke"
+            d="M 418 708
+               C 386 720, 350 738, 326 764
+               C 305 786, 286 815, 274 846
+               C 262 878, 262 915, 270 950
+               C 278 982, 286 1002, 284 1018
+               C 282 1030, 294 1034, 305 1014
+               C 316 994, 325 975, 344 972
+               C 365 968, 392 962, 416 942
+               C 438 922, 448 896, 448 864
+               C 449 828, 446 798, 434 776
+               C 424 758, 430 744, 426 724
+               C 424 714, 421 709, 418 708"
+          />
+          <path
+            class="draw-path white-main-stroke"
+            d="M 285 1022
+               C 282 1054, 288 1094, 302 1134
+               C 318 1178, 348 1216, 386 1252
+               C 418 1282, 442 1314, 464 1344
+               C 482 1368, 502 1372, 526 1362
+               C 558 1348, 594 1310, 632 1266
+               C 672 1218, 708 1166, 732 1114
+               C 752 1070, 754 1026, 742 992
+               C 738 982, 742 976, 748 966
+               C 754 955, 757 944, 756 936"
+          />
+          <path
+            class="draw-path white-main-stroke"
+            d="M 652 678
+               C 665 692, 662 722, 634 734
+               C 608 744, 582 728, 586 700
+               C 588 692, 590 688, 587 686
+               L 482 694
+               L 488 762
+               C 489 758, 502 754, 516 758
+               C 534 764, 542 786, 540 806
+               C 537 826, 520 840, 502 838
+               C 496 837, 493 833, 493 838
+               L 502 968
+               L 632 945
+               C 628 958, 626 974, 635 986
+               C 645 999, 666 1000, 678 988
+               C 688 978, 686 960, 678 948
+               C 674 942, 675 939, 682 938
+               L 756 926"
+          />
+        </g>
+
+        <!-- PHASE 3: UPPER BLOOD VESSELS (AORTA & VENA CAVA) -->
+        <g id="phase-3-upper-vessels">
+          <path
+            class="draw-path white-main-stroke"
+            d="M 398 672
+               C 410 644, 412 612, 396 588
+               C 382 566, 356 550, 332 534
+               C 327 530, 328 518, 336 506
+               C 343 496, 351 492, 356 497
+               C 374 512, 396 528, 415 540"
+          />
+          <path
+            class="draw-path white-main-stroke"
+            d="M 424 558
+               C 418 532, 404 504, 384 480
+               C 380 474, 381 464, 386 464
+               C 392 465, 396 472, 405 470
+               C 414 468, 418 463, 414 456
+               C 412 453, 417 450, 422 454
+               C 428 458, 430 468, 428 476
+               C 438 512, 456 566, 474 624
+               C 476 634, 475 648, 468 656"
+          />
+          <path class="draw-path white-detail-stroke" d="M 334 532 C 340 524, 348 510, 353 498" />
+          <path class="draw-path white-detail-stroke" d="M 386 474 C 398 480, 416 478, 426 470" />
+
+          <path
+            class="draw-path white-main-stroke"
+            d="M 465 660
+               C 482 642, 496 612, 512 578
+               C 530 540, 548 504, 563 475
+               C 565 471, 568 474, 569 480
+               C 572 486, 580 488, 586 485
+               C 588 484, 587 490, 583 498
+               C 566 532, 546 574, 536 614"
+          />
+          <path class="draw-path white-detail-stroke" d="M 564 482 C 570 490, 578 492, 584 489" />
+
+          <path
+            class="draw-path white-main-stroke"
+            d="M 523 644
+               C 542 612, 568 575, 598 544
+               C 614 528, 632 515, 642 508
+               C 644 506, 650 510, 649 514
+               C 656 512, 664 504, 668 496
+               C 671 491, 678 494, 676 500
+               C 673 506, 678 512, 684 508
+               C 684 515, 678 522, 679 528
+               C 682 532, 694 532, 704 535
+               C 708 537, 707 548, 702 552
+               C 694 555, 684 552, 679 556
+               C 678 562, 680 568, 676 572
+               C 672 574, 667 572, 668 566
+               C 668 558, 662 548, 650 546
+               C 634 544, 616 562, 604 584
+               C 596 598, 592 612, 588 618"
+          />
+          <path
+            class="draw-path white-main-stroke"
+            d="M 584 618
+               C 612 622, 638 638, 654 662
+               C 662 674, 660 684, 652 680
+               C 644 676, 640 668, 648 664"
+          />
+          <path
+            class="draw-path white-main-stroke"
+            d="M 322 768
+               C 328 730, 348 696, 382 674
+               C 412 654, 444 644, 460 652
+               C 466 656, 464 668, 456 672"
+          />
+          <path
+            class="draw-path white-main-stroke"
+            d="M 355 742
+               C 356 708, 376 680, 412 662
+               C 434 652, 452 652, 456 668
+               C 460 684, 452 710, 456 726
+               C 458 738, 448 748, 430 748"
+          />
+          <path
+            class="draw-path white-main-stroke"
+            d="M 438 664
+               C 422 668, 414 692, 420 716
+               C 424 734, 438 744, 446 734
+               C 452 724, 448 698, 450 676
+               C 451 666, 445 662, 438 664"
+          />
+          <path class="draw-path red-nerve-fine" d="M 436 674 C 432 690, 434 712, 442 726" />
+        </g>
+
+        <!-- PHASE 4: INTERNAL ANATOMICAL STRUCTURES -->
+        <g id="phase-4-internal-structures">
+          <path class="draw-path white-detail-stroke" d="M 408 730 C 374 746, 342 770, 318 804" />
+          <path class="draw-path white-detail-stroke" d="M 304 826 C 294 840, 288 856, 286 870" />
+          <path class="draw-path red-nerve-fine" d="M 434 780 C 428 784, 424 784, 420 782" />
+          <path class="draw-path red-nerve-fine" d="M 444 804 C 436 806, 430 806, 425 804" />
+          <path class="draw-path red-nerve-fine" d="M 446 826 C 438 828, 433 828, 428 826" />
+          <path class="draw-path red-nerve-fine" d="M 446 854 C 438 854, 434 852, 430 848" />
+          <path class="draw-path red-nerve-fine" d="M 440 882 C 434 878, 430 874, 426 868" />
+          <path class="draw-path red-nerve-fine" d="M 426 912 C 420 906, 416 900, 414 894" />
+          <path class="draw-path red-nerve-fine" d="M 384 952 C 380 944, 378 938, 378 932" />
+          <path class="draw-path red-nerve-fine" d="M 352 966 C 348 958, 346 952, 344 946" />
+          <path class="draw-path red-nerve-fine" d="M 318 982 C 314 978, 310 974, 308 970" />
+          <path class="draw-path red-nerve-fine" d="M 304 998 C 300 994, 296 990, 294 986" />
+          <path class="draw-path white-detail-stroke" d="M 448 866 C 460 864, 470 858, 476 852" />
+          <path class="draw-path white-detail-stroke" d="M 493 840 C 482 842, 474 852, 476 864 C 478 874, 486 882, 496 886" />
+          <path class="draw-path red-nerve-fine" d="M 482 854 C 486 860, 490 866, 494 870" />
+          <path class="draw-path white-detail-stroke" d="M 744 972 C 732 982, 718 988, 704 986" />
+        </g>
+
+        <!-- PHASE 5: GLOWING CRIMSON RED CORONARY NERVES & ARTERIES -->
+        <g id="phase-5-coronary-vessels">
+          <path
+            class="draw-path red-nerve-main"
+            d="M 612 949
+               C 608 986, 592 1024, 566 1054
+               C 542 1080, 514 1084, 484 1084
+               C 462 1084, 444 1094, 434 1110"
+          />
+          <path
+            class="draw-path red-nerve-main"
+            d="M 630 946
+               C 624 996, 602 1044, 574 1086
+               C 542 1134, 510 1184, 480 1236"
+          />
+          <path
+            class="draw-path red-nerve-main"
+            d="M 632 978
+               C 618 1034, 594 1084, 564 1132
+               C 536 1178, 512 1222, 492 1266"
+          />
+          <path
+            class="draw-path red-nerve-branch"
+            d="M 604 1018
+               C 584 1058, 554 1096, 524 1144
+               C 502 1178, 482 1212, 464 1238"
+          />
+          <path
+            class="draw-path red-nerve-branch"
+            d="M 556 1066
+               C 532 1072, 504 1070, 482 1054
+               C 472 1046, 468 1034, 472 1024"
+          />
+          <path class="draw-path red-nerve-branch" d="M 508 1068 C 498 1058, 496 1044, 498 1030" />
+          <path class="draw-path red-nerve-branch" d="M 494 1070 C 476 1072, 460 1078, 448 1086" />
+          <path
+            class="draw-path red-nerve-branch"
+            d="M 544 1082
+               C 516 1088, 488 1098, 476 1124
+               C 466 1144, 456 1158, 442 1166"
+          />
+          <path class="draw-path red-nerve-branch" d="M 484 1106 C 464 1118, 434 1134, 408 1146" />
+          <path class="draw-path red-nerve-branch" d="M 476 1126 C 478 1144, 474 1162, 462 1176" />
+          <path class="draw-path red-nerve-fine" d="M 476 1148 C 482 1156, 484 1166, 478 1174" />
+          <path
+            class="draw-path red-nerve-branch"
+            d="M 396 956
+               C 398 978, 396 1002, 404 1022
+               C 410 1038, 404 1054, 394 1064"
+          />
+          <path class="draw-path red-nerve-fine" d="M 397 984 C 386 994, 374 1002, 374 1016" />
+          <path class="draw-path red-nerve-fine" d="M 398 978 C 412 988, 426 996, 424 1012" />
+          <path class="draw-path red-nerve-fine" d="M 478 952 C 476 962, 482 968, 492 966" />
+          <path class="draw-path red-nerve-fine" d="M 498 968 C 492 978, 486 988, 482 996" />
+          <path class="draw-path red-nerve-fine" d="M 496 972 C 504 976, 510 980, 514 986" />
+          <path
+            class="draw-path red-nerve-branch"
+            d="M 618 1024
+               C 624 1054, 634 1084, 642 1114
+               C 648 1136, 650 1158, 638 1170
+               C 632 1174, 628 1168, 632 1162"
+          />
+          <path class="draw-path red-nerve-fine" d="M 626 1054 C 636 1072, 644 1084, 656 1090" />
+          <path class="draw-path red-nerve-fine" d="M 632 1084 C 624 1104, 622 1126, 628 1142" />
+          <path class="draw-path red-nerve-fine" d="M 638 1102 C 644 1112, 652 1116, 660 1118" />
+          <path
+            class="draw-path red-nerve-branch"
+            d="M 580 1108
+               C 574 1142, 574 1176, 588 1204
+               C 594 1216, 592 1226, 586 1232"
+          />
+          <path class="draw-path red-nerve-fine" d="M 578 1158 C 570 1178, 566 1198, 568 1216" />
+          <path class="draw-path red-nerve-fine" d="M 584 1192 C 596 1204, 606 1212, 614 1216" />
+          <path class="draw-path red-nerve-fine" d="M 516 1202 C 514 1224, 514 1246, 520 1264" />
+          <path class="draw-path red-nerve-fine" d="M 500 1246 C 496 1264, 496 1280, 502 1292" />
+        </g>
+
+        <!-- PHASE 6: FINAL ARTISTIC CAPILLARIES & TEXTURE ACCENTS -->
+        <g id="phase-6-artistic-details">
+          <path class="draw-path red-nerve-fine" d="M 358 514 C 366 520, 374 526, 382 532" />
+          <path class="draw-path red-nerve-fine" d="M 384 542 C 392 548, 398 552, 404 558" />
+          <path class="draw-path red-nerve-fine" d="M 412 492 C 414 500, 418 508, 420 516" />
+          <path class="draw-path red-nerve-fine" d="M 454 624 C 460 618, 466 612, 470 608" />
+          <path class="draw-path red-nerve-fine" d="M 456 638 C 464 632, 470 626, 474 622" />
+          <path class="draw-path red-nerve-fine" d="M 522 616 C 526 606, 530 598, 534 590" />
+          <path class="draw-path red-nerve-fine" d="M 530 622 C 536 614, 540 608, 544 602" />
+          <path class="draw-path red-nerve-fine" d="M 642 522 C 646 520, 650 518, 654 516" />
+          <path class="draw-path red-nerve-fine" d="M 680 540 C 686 540, 692 540, 696 542" />
+          <path class="draw-path red-nerve-fine" d="M 642 652 C 648 652, 654 654, 658 658" />
+          <path class="draw-path red-nerve-fine" d="M 308 1034 C 306 1044, 304 1054, 302 1062" />
+          <path class="draw-path red-nerve-fine" d="M 294 1068 C 292 1084, 294 1100, 298 1114" />
+          <path class="draw-path red-nerve-fine" d="M 442 1286 C 448 1290, 454 1292, 460 1292" />
+          <path class="draw-path red-nerve-fine" d="M 484 1316 C 490 1312, 496 1306, 500 1300" />
+          <path class="draw-path red-nerve-fine" d="M 508 1298 C 512 1296, 516 1294, 520 1290" />
+        </g>
+
+        <!-- PHASE 7: SERIF LETTER "R" IN THE JIGSAW CUTOUT -->
+        <g id="phase-7-letter-r">
+          <path
+            class="draw-path r-stroke-guide"
+            d="M 578 758
+               C 590 738, 622 732, 656 734
+               C 678 736, 688 748, 682 764
+               C 674 782, 646 794, 612 796"
+          />
+          <path class="draw-path r-stroke-guide" d="M 628 736 L 568 854" />
+          <path
+            class="draw-path r-stroke-guide"
+            d="M 630 794
+               C 648 824, 668 858, 692 876
+               C 712 890, 742 892, 766 882"
+          />
+          <path
+            id="letterRFill"
+            class="r-calligraphic-fill"
+            d="M 576 760
+               C 578 746, 594 736, 622 733
+               C 644 731, 666 732, 678 739
+               C 689 745, 692 756, 686 768
+               C 679 782, 658 793, 635 797
+               C 654 824, 672 854, 694 872
+               C 712 886, 738 890, 765 880
+               L 767 884
+               C 738 896, 704 894, 680 876
+               C 656 858, 638 826, 619 798
+               L 606 798
+               L 578 854
+               L 554 856
+               L 618 738
+               C 596 740, 584 748, 579 761
+               Z
+               M 632 738
+               L 609 792
+               C 636 792, 658 782, 666 765
+               C 673 750, 662 737, 632 738
+               Z"
+          />
+        </g>
+
+        <!-- Artist Drawing Pen Cursor Tip -->
+        <circle id="penCursor" class="pen-cursor" cx="418" cy="708" r="4.5" />
+      </svg>
+    </div>
+
+    <!-- Clean Permanent Signature & Play Again Option -->
+    <footer id="altafSignatureBox" class="altaf-signature-box" title="Click to re-draw Tharki's Heart">
+      <h1 class="altaf-title">Tharki ka Heart</h1>
+      <p id="altafSub" class="altaf-Origin-sub">Beating Eternally Under The Stars</p>
+      <div>
+        <button id="replayHeartBtn" class="replay-heart-btn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          <span>Play Again</span>
+        </button>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* ==========================================================================
+         1. CONTINUOUS STAR SHOWER & SHOOTING METEORS ENGINE
+         ========================================================================== */
+      const starCanvas = document.getElementById("starCanvas");
+      const ctx = starCanvas.getContext("2d");
+      let stars = [];
+      let shootingStars = [];
+
+      function resizeStarCanvas() {
+        starCanvas.width = window.innerWidth;
+        starCanvas.height = window.innerHeight;
+      }
+
+      function initStars() {
+        resizeStarCanvas();
+        stars = [];
+        const count = Math.floor((window.innerWidth * window.innerHeight) / 7500);
+        for (let i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * starCanvas.width,
+            y: Math.random() * starCanvas.height,
+            radius: Math.random() * 1.45 + 0.3,
+            alpha: Math.random() * 0.8 + 0.2,
+            twinkleSpeed: (Math.random() * 0.018 + 0.004) * (Math.random() < 0.5 ? 1 : -1),
+            driftY: Math.random() * 0.18 + 0.04,
+            hue: Math.random() < 0.22 ? "#fda4af" : "#ffffff"
+          });
+        }
+      }
+
+      function spawnShootingStar() {
+        const startX = Math.random() * starCanvas.width * 0.85 + starCanvas.width * 0.1;
+        const startY = Math.random() * starCanvas.height * 0.35;
+        const angle = (Math.PI / 4) + (Math.random() * 0.2 - 0.1);
+        const speed = Math.random() * 7 + 8;
+        shootingStars.push({
+          x: startX,
+          y: startY,
+          vx: -Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          length: Math.random() * 90 + 60,
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.012
+        });
+      }
+
+      function renderStarShower() {
+        ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+
+        // Twinkling & gently drifting stars
+        for (let i = 0; i < stars.length; i++) {
+          const s = stars[i];
+          s.alpha += s.twinkleSpeed;
+          if (s.alpha > 0.95 || s.alpha < 0.15) {
+            s.twinkleSpeed *= -1;
+          }
+          s.y += s.driftY;
+          if (s.y > starCanvas.height) {
+            s.y = 0;
+            s.x = Math.random() * starCanvas.width;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0.1, Math.min(1, s.alpha));
+          ctx.fillStyle = s.hue;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Occasional shooting stars
+        if (Math.random() < 0.025 && shootingStars.length < 3) {
+          spawnShootingStar();
+        }
+
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          const m = shootingStars[i];
+          m.x += m.vx;
+          m.y += m.vy;
+          m.alpha -= m.decay;
+
+          if (m.alpha <= 0) {
+            shootingStars.splice(i, 1);
+            continue;
+          }
+
+          const tailX = m.x - (m.vx / Math.hypot(m.vx, m.vy)) * m.length;
+          const tailY = m.y - (m.vy / Math.hypot(m.vx, m.vy)) * m.length;
+
+          const grad = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
+          grad.addColorStop(0, `rgba(255, 240, 245, ${m.alpha})`);
+          grad.addColorStop(0.4, `rgba(251, 113, 133, ${m.alpha * 0.6})`);
+          grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+          ctx.save();
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.8;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(m.x, m.y);
+          ctx.lineTo(tailX, tailY);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        requestAnimationFrame(renderStarShower);
+      }
+
+      window.addEventListener("resize", resizeStarCanvas);
+      initStars();
+      requestAnimationFrame(renderStarShower);
+
+      /* ==========================================================================
+         2. SYNCED 30-SECOND LYRICS, AUDIO ENGINE & EXACT 30S HEART ANIMATION
+         ========================================================================== */
+      const openingGateway = document.getElementById("openingGateway");
+      const enterHeartBtn = document.getElementById("enterHeartBtn");
+      const svgElement = document.getElementById("heartSvg");
+      const penCursor = document.getElementById("penCursor");
+      const letterRFill = document.getElementById("letterRFill");
+      const heartAura = document.getElementById("heartAura");
+      const altafSub = document.getElementById("altafSub");
+      const altafSignatureBox = document.getElementById("altafSignatureBox");
+      const lyricLineDisplay = document.getElementById("lyricLineDisplay");
+      const heartSongAudio = document.getElementById("heartSongAudio");
+      const replayHeartBtn = document.getElementById("replayHeartBtn");
+
+      let animationRunId = 0;
+      let lyricTimeouts = [];
+      let synthAudioCtx = null;
+      let synthInterval = null;
+      let fallbackStopTimer = null;
+
+      /* ==========================================================================
+         EDITABLE 30-SECOND SONG LYRICS TIMELINE ("O SAAHIB")
+         You can freely adjust startSec and endSec for each line below.
+         ========================================================================== */
+      const LYRICS_TIMELINE = [
+        { startSec: 0.0,  endSec: 3.5,  text: "Yaar toh qalb mein dhadke..." },
+        { startSec: 4.0,  endSec: 6.3,  text: "Rooh mein baitha utar ke" },
+        { startSec: 7.0,  endSec: 9.4, text: "Main saans bhi loon kaise" },
+        { startSec: 10.0, endSec: 13.5, text: "Duniyan se dar dar ke..." },
+        { startSec: 14.0, endSec: 16.0, text: "O Saahib, O Saahib..." },
+        { startSec: 16.2, endSec: 19.0, text: "Teri Baandi Hoon Main" },
+        { startSec: 20.0, endSec: 26.0, text: "Tu bole dil sahib, jaan bhi de doon main" },
+        { startSec: 27.0, endSec: 32.0, text: "O Sahib, O Sahib... tere vaari vaari main" }
+      ];
+
+      /**
+       * Gentle Web Audio API Sufi/Romantic ambient melody fallback
+       * in case "song.mp3" is not present in the directory.
+       */
+      function startRomanticSynthFallback() {
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          if (!synthAudioCtx) {
+            synthAudioCtx = new AudioCtx();
+          }
+          if (synthAudioCtx.state === "suspended") {
+            synthAudioCtx.resume();
+          }
+
+          const notes = [220.0, 261.63, 293.66, 329.63, 293.66, 261.63, 246.94, 220.0];
+          let idx = 0;
+
+          function playSoftNote() {
+            if (!synthAudioCtx) return;
+            const now = synthAudioCtx.currentTime;
+            const osc = synthAudioCtx.createOscillator();
+            const gain = synthAudioCtx.createGain();
+
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(notes[idx % notes.length], now);
+
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.exponentialRampToValueAtTime(0.065, now + 0.6);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.4);
+
+            osc.connect(gain);
+            gain.connect(synthAudioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 3.5);
+            idx += 1;
+          }
+
+          playSoftNote();
+          synthInterval = setInterval(playSoftNote, 2400);
+        } catch (_) {
+          // Ignore audio context restrictions
+        }
+      }
+
+      function stopRomanticSynthFallback() {
+        if (synthInterval) {
+          clearInterval(synthInterval);
+          synthInterval = null;
+        }
+        if (fallbackStopTimer) {
+          clearTimeout(fallbackStopTimer);
+          fallbackStopTimer = null;
+        }
+      }
+
+      function clearLyricTimers() {
+        lyricTimeouts.forEach((id) => clearTimeout(id));
+        lyricTimeouts = [];
+        lyricLineDisplay.classList.remove("active", "fade-out");
+        lyricLineDisplay.textContent = "";
+      }
+
+      /**
+       * Stops the heart pumping, audio, and active drawing when the song finishes,
+       * and reveals the "Play Again" button.
+       */
+      function finishAndShowPlayOption() {
+        animationRunId += 1;
+        stopRomanticSynthFallback();
+        clearLyricTimers();
+
+        try {
+          heartSongAudio.pause();
+        } catch (_) {}
+
+        // Ensure the completed heart remains visible in a calm, resting state
+        const allPaths = svgElement.querySelectorAll(".draw-path");
+        allPaths.forEach((path) => {
+          path.style.opacity = "1";
+          path.style.strokeDashoffset = "0";
+        });
+        if (letterRFill) {
+          letterRFill.classList.add("visible");
+        }
+        penCursor.classList.remove("active", "red-nib");
+
+        // Stop the pumping & crimson pulse
+        svgElement.classList.remove("pumping");
+        heartAura.classList.remove("active");
+
+        // Show subtitle & "Play Again" button
+        altafSub.classList.add("visible");
+        if (replayHeartBtn) {
+          replayHeartBtn.classList.add("visible");
+        }
+      }
+
+      /**
+       * Automatically starts the song in the background when "Enter In My Heart" is clicked.
+       */
+      function startSongPlayback(runId) {
+        stopRomanticSynthFallback();
+        heartSongAudio.currentTime = 0;
+
+        const playPromise = heartSongAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // If song.mp3 isn't in the folder, play the gentle ambient synth for 33s
+            startRomanticSynthFallback();
+            fallbackStopTimer = setTimeout(() => {
+              if (runId === animationRunId) {
+                finishAndShowPlayOption();
+              }
+            }, 33500);
+          });
+        }
+      }
+
+      // Listen for when the actual MP3 song finishes playing
+      heartSongAudio.addEventListener("ended", () => {
+        finishAndShowPlayOption();
+      });
+
+      /**
+       * Schedules all 8 cursive lyric lines according to LYRICS_TIMELINE
+       */
+      function startSyncedLyrics(runId) {
+        clearLyricTimers();
+
+        LYRICS_TIMELINE.forEach((item) => {
+          const showId = setTimeout(() => {
+            if (runId !== animationRunId) return;
+            lyricLineDisplay.classList.remove("fade-out");
+            lyricLineDisplay.textContent = item.text;
+            lyricLineDisplay.classList.add("active");
+          }, item.startSec * 1000);
+
+          const hideId = setTimeout(() => {
+            if (runId !== animationRunId) return;
+            lyricLineDisplay.classList.remove("active");
+            lyricLineDisplay.classList.add("fade-out");
+          }, item.endSec * 1000);
+
+          lyricTimeouts.push(showId, hideId);
+        });
+      }
+
+      function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+
+      function wait(ms, runId) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(runId === animationRunId);
+          }, ms);
+        });
+      }
+
+      function initializePaths() {
+        svgElement.classList.remove("pumping");
+        heartAura.classList.remove("active");
+        altafSub.classList.remove("visible");
+        if (replayHeartBtn) {
+          replayHeartBtn.classList.remove("visible");
+        }
+
+        const allPaths = svgElement.querySelectorAll(".draw-path");
+        allPaths.forEach((path) => {
+          const length = path.getTotalLength();
+          path.dataset.length = length;
+          path.style.strokeDasharray = `${length}`;
+          path.style.strokeDashoffset = `${length}`;
+          path.style.opacity = "0";
+        });
+
+        if (letterRFill) {
+          letterRFill.classList.remove("visible");
+        }
+        penCursor.classList.remove("active", "red-nib");
+      }
+
+      function animateSinglePath(path, duration, runId) {
+        return new Promise((resolve) => {
+          const length = parseFloat(path.dataset.length || path.getTotalLength());
+          path.style.opacity = "1";
+
+          const isRedNerve =
+            path.classList.contains("red-nerve-main") ||
+            path.classList.contains("red-nerve-branch") ||
+            path.classList.contains("red-nerve-fine");
+
+          penCursor.classList.add("active");
+          penCursor.classList.toggle("red-nib", isRedNerve);
+
+          const startTime = performance.now();
+
+          function frame(now) {
+            if (runId !== animationRunId) {
+              resolve(false);
+              return;
+            }
+
+            const elapsed = now - startTime;
+            const rawProgress = Math.min(elapsed / duration, 1);
+            const easedProgress = easeInOutCubic(rawProgress);
+
+            const currentOffset = length * (1 - easedProgress);
+            path.style.strokeDashoffset = `${currentOffset}`;
+
+            if (length > 0) {
+              try {
+                const pt = path.getPointAtLength(length * easedProgress);
+                penCursor.setAttribute("cx", pt.x.toFixed(1));
+                penCursor.setAttribute("cy", pt.y.toFixed(1));
+              } catch (_) {}
+            }
+
+            if (rawProgress < 1) {
+              requestAnimationFrame(frame);
+            } else {
+              path.style.strokeDashoffset = "0";
+              resolve(true);
+            }
+          }
+
+          requestAnimationFrame(frame);
+        });
+      }
+
+      /**
+       * Allocates an exact total millisecond budget across all paths in a group
+       * proportionally by path length so the entire heart finishes in exactly 30.0s.
+       */
+      async function animatePhaseGroupExact(groupId, totalBudgetMs, gapMs, runId) {
+        const group = document.getElementById(groupId);
+        if (!group || runId !== animationRunId) return;
+
+        const paths = Array.from(group.querySelectorAll(".draw-path"));
+        if (paths.length === 0) return;
+
+        const totalGapTime = gapMs * Math.max(0, paths.length - 1);
+        const drawingBudget = Math.max(100, totalBudgetMs - totalGapTime);
+
+        const lengths = paths.map((p) =>
+          Math.max(12, parseFloat(p.dataset.length || p.getTotalLength()))
+        );
+        const sumLengths = lengths.reduce((acc, val) => acc + val, 0);
+
+        for (let i = 0; i < paths.length; i++) {
+          if (runId !== animationRunId) return;
+          const pathDuration = (lengths[i] / sumLengths) * drawingBudget;
+          await animateSinglePath(paths[i], pathDuration, runId);
+
+          if (gapMs > 0 && i < paths.length - 1) {
+            await wait(gapMs, runId);
+          }
+        }
+      }
+
+      /**
+       * Master 30.0-Second Drawing Sequence:
+       * 0.85s + 5.80s + 5.20s + 3.80s + 8.60s + 2.75s + 3.00s = 30.00 seconds exact.
+       */
+      async function startHeartExperience() {
+        animationRunId += 1;
+        const currentRun = animationRunId;
+
+        initializePaths();
+
+        // Start automatic song & synced cursive lyrics immediately with the 30s drawing
+        startSongPlayback(currentRun);
+        startSyncedLyrics(currentRun);
+
+        // Phase 1 — 850 ms total
+        await wait(600, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        penCursor.setAttribute("cx", "418");
+        penCursor.setAttribute("cy", "708");
+        penCursor.classList.add("active");
+        await wait(250, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        // Phase 2 — Main Heart Outline (5,800 ms)
+        await animatePhaseGroupExact("phase-2-outline", 5800, 90, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        // Phase 3 — Upper Blood Vessels (5,200 ms)
+        await animatePhaseGroupExact("phase-3-upper-vessels", 5200, 45, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        // Phase 4 — Internal Anatomical Structures (3,800 ms)
+        await animatePhaseGroupExact("phase-4-internal-structures", 3800, 25, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        // Phase 5 — Glowing Crimson Red Coronary Nerves (8,600 ms)
+        await animatePhaseGroupExact("phase-5-coronary-vessels", 8600, 30, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        // Phase 6 — Fine Capillaries & Details (2,750 ms)
+        await animatePhaseGroupExact("phase-6-artistic-details", 2750, 18, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        // Phase 7 — Letter "R" Stroke + Calligraphic Fill + Pump Activation (3,000 ms)
+        await animatePhaseGroupExact("phase-7-letter-r", 2300, 45, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        if (letterRFill) {
+          letterRFill.classList.add("visible");
+        }
+        penCursor.classList.remove("active", "red-nib");
+
+        await wait(700, currentRun);
+        if (currentRun !== animationRunId) return;
+
+        // Exact 30.0s mark reached: Begin realistic "Lub-Dub" Heartbeat Pumping!
+        svgElement.classList.add("pumping");
+        heartAura.classList.add("active");
+        altafSub.classList.add("visible");
+      }
+
+      // Initialize paths on load and wait for user to click "Enter In My Heart"
+      window.addEventListener("DOMContentLoaded", () => {
+        initializePaths();
+      });
+
+      enterHeartBtn.addEventListener("click", () => {
+        openingGateway.classList.add("hidden-gateway");
+        startHeartExperience();
+      });
+
+      if (replayHeartBtn) {
+        replayHeartBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          startHeartExperience();
+        });
+      }
+
+      altafSignatureBox.addEventListener("click", () => {
+        startHeartExperience();
+      });
+    })();
+  </script>
+</body>
+</html>
